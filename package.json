@@ -1,0 +1,15 @@
+{
+  "name": "authority-boundary-test-kit",
+  "version": "0.1.0",
+  "description": "Adapter-based adversarial contract checks for agent authority boundaries",
+  "type": "module",
+  "license": "MIT",
+  "engines": { "node": ">=24" },
+  "exports": "./src/index.mjs",
+  "bin": { "authority-boundary-check": "./src/cli.mjs" },
+  "scripts": {
+    "test": "node --test",
+    "demo": "node src/cli.mjs examples/reference-adapter.mjs",
+    "demo:vulnerable": "node src/cli.mjs examples/vulnerable-adapter.mjs"
+  }
+}
