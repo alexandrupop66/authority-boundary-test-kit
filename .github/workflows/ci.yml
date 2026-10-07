@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Install
+        run: npm ci
+      - name: Run toolkit tests
+        run: npm test
+      - name: Run passing reference adapter
+        run: npm run demo
+      - name: Verify vulnerable adapter is rejected
+        shell: bash
+        run: |
+          set +e
+          npm run demo:vulnerable
+          code=$?
+          set -e
+          if [ "$code" -ne 1 ]; then
+            echo "Expected vulnerable adapter to exit 1; got $code"
+            exit 1
+          fi
